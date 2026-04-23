@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nexus AI Initiative</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins', sans-serif;
+        }
+
+        body{
+            background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            transition:0.5s;
+        }
+
+        body.light{
+            background: linear-gradient(135deg,#56ab2f,#a8e063);
+        }
+
+        .container{
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            padding:40px;
+            border-radius:20px;
+            width:90%;
+            max-width:800px;
+            color:white;
+            box-shadow:0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        h1{
+            text-align:center;
+            margin-bottom:10px;
+        }
+
+        #typing{
+            text-align:center;
+            margin-bottom:25px;
+            font-size:16px;
+            color:#90ee90;
+        }
+
+        .form-group{
+            margin-bottom:15px;
+        }
+
+        label{
+            display:block;
+            margin-bottom:5px;
+            font-weight:500;
+        }
+
+        input,select{
+            width:100%;
+            padding:10px;
+            border-radius:8px;
+            border:none;
+            font-size:14px;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            margin-top:15px;
+            border:none;
+            background:#00c9a7;
+            color:white;
+            border-radius:10px;
+            cursor:pointer;
+            font-size:16px;
+            transition:0.3s;
+        }
+
+        button:hover{
+            background:#008b8b;
+            transform:scale(1.05);
+        }
+
+        .result{
+            margin-top:25px;
+            padding:20px;
+            border-radius:15px;
+            background:rgba(255,255,255,0.2);
+            text-align:left;
+        }
+
+        .toggle{
+            position:absolute;
+            top:20px;
+            right:20px;
+            cursor:pointer;
+            background:white;
+            color:black;
+            padding:8px 12px;
+            border-radius:20px;
+            font-size:14px;
+        }
+
+        .music-btn{
+            position:absolute;
+            top:20px;
+            left:20px;
+            cursor:pointer;
+            background:white;
+            color:black;
+            padding:8px 12px;
+            border-radius:20px;
+            font-size:14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="toggle" onclick="toggleMode()">🌙 Toggle</div>
+<div class="music-btn" onclick="playMusic()">🎵 Music</div>
+
+<audio id="bgMusic">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+
+    <h1>🌱 Nexus AI Initiative</h1>
+    <div id="typing"></div>
+
+    <form method="POST">
+
+        <div class="form-group">
+            <label>Soil pH Value</label>
+            <input type="number" step="0.1" name="ph" required>
+        </div>
+
+        <div class="form-group">
+            <label>Temperature (°C)</label>
+            <input type="number" step="0.1" name="temperature" required>
+        </div>
+
+        <div class="form-group">
+            <label>Nitrogen Level</label>
+            <select name="nitrogen">
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Phosphorus Level</label>
+            <select name="phosphorus">
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Potassium Level</label>
+            <select name="potassium">
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Soil Type</label>
+            <select name="soil">
+                <option>Sandy</option>
+                <option>Loam</option>
+                <option>Clay</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Moisture Level</label>
+            <select name="moisture">
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Season</label>
+            <select name="season">
+                <option>Kharif</option>
+                <option>Rabi</option>
+                <option>Summer</option>
+            </select>
+        </div>
+
+        <button type="submit">🚀 Predict Crop</button>
+
+    </form>
+
+    {% if result %}
+    <div class="result">
+        <h2>🌾 Recommended Crop: {{ result.crop }}</h2>
+        <p><b>Fertilizer Recommendation:</b> {{ result.fertilizer }}</p>
+        <p><b>Estimated Harvest Time:</b> {{ result.harvest }} days</p>
+        <p><b>Pesticide Suggestion:</b> {{ result.pesticide }}</p>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+    const text="AI Powered Smart Crop Recommendation System";
+    let i=0;
+    function type(){
+        if(i<text.length){
+            document.getElementById("typing").innerHTML+=text.charAt(i);
+            i++;
+            setTimeout(type,40);
+        }
+    }
+    type();
+
+    function toggleMode(){
+        document.body.classList.toggle("light");
+    }
+
+    function playMusic(){
+        let music=document.getElementById("bgMusic");
+        music.paused?music.play():music.pause();
+    }
+</script>
+
+</body>
+</html>
