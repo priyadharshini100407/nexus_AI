@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nexus AI — Soil Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Syne:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}"/>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<canvas id="bg-canvas"></canvas>
+<div class="noise"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="logo-mark">🌿</div>
+    <span class="logo-text">Nexus AI</span>
+  </a>
+  <div class="breadcrumb">
+    <a href="/">Home</a>
+    <span>›</span>
+    <span>Soil Analysis</span>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="page-intro">
+    <div class="step-badge"><div class="step-dot"></div>Step 1 of 3</div>
+    <h1>Soil <em>Analysis</em> Form</h1>
+    <p>Enter your soil parameters. Our AI model will recommend the optimal crop and farming strategy.</p>
+  </div>
+
+  <!-- Progress Steps -->
+  <div class="prog-wrap">
+    <div class="prog-step on"><div class="pnum">1</div>Enter Parameters</div>
+    <div class="prog-step"><div class="pnum">2</div>AI Analysis</div>
+    <div class="prog-step"><div class="pnum">3</div>Results</div>
+  </div>
+
+  <div class="form-card">
+    <form action="/predict" method="POST" id="mainForm">
+
+      <!-- Section 1: Soil Chemistry -->
+      <div class="sec">
+        <div class="sec-head">
+          <div class="sec-ico" style="background:rgba(0,200,150,0.1)">🧪</div>
+          <div>
+            <div class="sec-label">Soil Chemistry</div>
+            <div class="sec-sub">Basic soil measurements</div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="ph">Soil pH Level</label>
+            <input type="number" id="ph" name="ph" step="0.1" min="0" max="14" placeholder="e.g. 6.5" required/>
+          </div>
+          <div class="field">
+            <label for="temperature">Temperature (°C)</label>
+            <input type="number" id="temperature" name="temperature" step="0.1" placeholder="e.g. 28.0" required/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: NPK Sliders -->
+      <div class="sec">
+        <div class="sec-head">
+          <div class="sec-ico" style="background:rgba(245,200,66,0.1)">🌱</div>
+          <div>
+            <div class="sec-label">Nutrient Levels (NPK)</div>
+            <div class="sec-sub">Slide to set nutrient concentration</div>
+          </div>
+        </div>
+        <div class="npk-wrap">
+          <div class="npk-item">
+            <div class="npk-row">
+              <span class="npk-label">Nitrogen (N)</span>
+              <span class="npk-val" id="nVal">50</span>
+            </div>
+            <input type="range" id="nSlider" name="N" min="0" max="140" value="50"/>
+            <div class="npk-hint"><span>Deficient (0)</span><span>Optimal (140)</span></div>
+          </div>
+          <div class="npk-item">
+            <div class="npk-row">
+              <span class="npk-label">Phosphorus (P)</span>
+              <span class="npk-val" id="pVal">50</span>
+            </div>
+            <input type="range" id="pSlider" name="P" min="0" max="145" value="50"/>
+            <div class="npk-hint"><span>Deficient (0)</span><span>Optimal (145)</span></div>
+          </div>
+          <div class="npk-item">
+            <div class="npk-row">
+              <span class="npk-label">Potassium (K)</span>
+              <span class="npk-val" id="kVal">50</span>
+            </div>
+            <input type="range" id="kSlider" name="K" min="0" max="205" value="50"/>
+            <div class="npk-hint"><span>Deficient (0)</span><span>Optimal (205)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Land & Season -->
+      <div class="sec">
+        <div class="sec-head">
+          <div class="sec-ico" style="background:rgba(100,160,255,0.1)">🗺️</div>
+          <div>
+            <div class="sec-label">Land & Season</div>
+            <div class="sec-sub">Your field context</div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label>Soil Type</label>
+            <div class="sel-wrap">
+              <select name="soil" required>
+                <option value="Sandy">Sandy</option>
+                <option value="Loam">Loam</option>
+                <option value="Clay">Clay</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Growing Season</label>
+            <div class="sel-wrap">
+              <select name="season" required>
+                <option value="Kharif">Kharif (Jun–Oct)</option>
+                <option value="Rabi">Rabi (Nov–Apr)</option>
+                <option value="Summer">Summer (Mar–Jun)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Moisture -->
+      <div class="sec">
+        <div class="sec-head">
+          <div class="sec-ico" style="background:rgba(100,180,255,0.1)">💧</div>
+          <div>
+            <div class="sec-label">Moisture Measurement</div>
+            <div class="sec-sub">Gravimetric method</div>
+          </div>
+        </div>
+        <div class="moisture-note">
+          💡 Weigh your soil sample, dry it completely, then weigh again. Enter both weights below — moisture is calculated automatically.
+        </div>
+        <div class="grid-2" style="margin-top:20px;">
+          <div class="field">
+            <label for="wet">Wet Weight (g)</label>
+            <input type="number" id="wet" name="wet" step="0.01" placeholder="e.g. 150.00" required/>
+          </div>
+          <div class="field">
+            <label for="dry">Dry Weight (g)</label>
+            <input type="number" id="dry" name="dry" step="0.01" placeholder="e.g. 120.00" required/>
+          </div>
+        </div>
+
+        <!-- Live moisture preview -->
+        <div id="moistPreview" class="moist-preview" style="display:none;">
+          <div class="moist-top">
+            <span class="moist-label">Calculated Moisture</span>
+            <span id="moistVal" class="moist-val">—</span>
+          </div>
+          <div class="moist-track">
+            <div id="moistBar" class="moist-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="form-foot">
+        <div class="foot-hint"><span class="foot-dot"></span>All fields required · Processed locally</div>
+        <button type="submit" class="btn-submit">
+          Run AI Analysis <span class="arr">→</span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loader-ring"></div>
+  <div class="loader-text">Analysing Soil</div>
+  <div class="loader-sub">Please wait a moment...</div>
+  <div class="loader-steps">
+    <div class="ls" id="ls1"><div class="ls-dot"></div>Reading NPK levels...</div>
+    <div class="ls" id="ls2"><div class="ls-dot"></div>Calculating moisture content...</div>
+    <div class="ls" id="ls3"><div class="ls-dot"></div>Cross-referencing pH data...</div>
+    <div class="ls" id="ls4"><div class="ls-dot"></div>Running ML prediction...</div>
+    <div class="ls" id="ls5"><div class="ls-dot"></div>Generating recommendations...</div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/form.js') }}"></script>
+</body>
+</html>

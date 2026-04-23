@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nexus AI — Crop Recommendation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Syne:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/result.css') }}"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<canvas id="bg-canvas"></canvas>
+<div class="noise"></div>
+<canvas class="confetti-canvas" id="confetti"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="logo-mark">🌿</div>
+    <span class="logo-text">Nexus AI</span>
+  </a>
+  <div class="nav-status">
+    <div class="nav-dot"></div>
+    Analysis Complete
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- SUCCESS HEADER -->
+  <div class="success-head">
+    <div class="s-chip">AI Recommendation Ready</div>
+    <h1>Your <em>optimal crop</em><br>has been identified</h1>
+    <p>Based on your soil parameters, here is the complete farming recommendation.</p>
+  </div>
+
+  <!-- CROP HERO -->
+  <div class="crop-hero">
+    <div class="ch-layout">
+      <div class="ch-left">
+        <div class="ch-label">Primary Recommended Crop</div>
+        <div class="ch-name">{{ result.crop }}</div>
+        <div class="ch-sub">Best match for your soil profile</div>
+        <div style="margin-top: 22px; display: flex; gap: 12px; flex-wrap: wrap;">
+          <div style="background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%); padding: 10px 22px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 0.85em; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px;">Also suitable</span>
+            <strong style="font-size: 1.25em; color: #fff; font-family: 'Playfair Display', serif;">{{ result.alt1 }}</strong>
+          </div>
+          <div style="background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%); padding: 10px 22px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 0.85em; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px;">Option 3</span>
+            <strong style="font-size: 1.25em; color: #fff; font-family: 'Playfair Display', serif;">{{ result.alt2 }}</strong>
+          </div>
+        </div>
+      </div>
+      <div class="ch-image-container">
+        <img src="{{ url_for('static', filename='images/' ~ result.image) }}" alt="{{ result.crop }}" class="crop-image" onerror="this.onerror=null; this.src='https://placehold.co/300x300/00c896/ffffff.png?text={{ result.crop | urlencode }}'">
+      </div>
+      <div class="ch-icon" style="display:none;">
+        {% if result.crop|lower == "rice" %}🌾
+        {% elif result.crop|lower == "wheat" %}🌾
+        {% elif result.crop|lower == "maize" %}🌽
+        {% elif result.crop|lower == "cotton" %}🌿
+        {% elif result.crop|lower == "groundnut" %}🥜
+        {% else %}🌱{% endif %}
+      </div>
+    </div>
+    <div class="conf-bar">
+      <div class="conf-label">
+        <span>Model Confidence</span>
+        <span id="confNum">0%</span>
+      </div>
+      <div class="conf-track">
+        <div class="conf-fill" id="confFill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAIL CARDS -->
+  <div class="detail-grid">
+    <div class="dcard" id="fertCard" style="animation-delay:0.65s">
+      <div class="dc-header">
+        <div class="dc-icon">🧪</div>
+        <div class="dc-label">Fertilizer Proportions</div>
+      </div>
+      <div class="chart-container">
+        <canvas id="fertChart"></canvas>
+      </div>
+    </div>
+    <div class="dcard" id="pestCard" style="animation-delay:0.75s">
+      <div class="dc-header">
+        <div class="dc-icon">🛡️</div>
+        <div class="dc-label">Pesticide Allocation</div>
+      </div>
+      <div class="chart-container">
+        <canvas id="pestChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- HARVEST CARD -->
+  <div class="harvest-card" style="animation-delay:0.85s">
+    <div class="hc-top">
+      <div class="hc-left">
+        <div class="hc-ico">📅</div>
+        <div>
+          <div class="hc-label">Harvest Timeline</div>
+          <div class="hc-value">{{ result.harvest_days }} days</div>
+        </div>
+      </div>
+      <div class="hc-badge">~{{ (result.harvest_days / 30) | round | int }} months</div>
+    </div>
+    <div class="timeline-chart-container">
+      <canvas id="harvestChart"></canvas>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions" style="animation-delay:0.95s">
+    <a href="/form" class="btn-p">🔁 Analyse Again</a>
+    <a href="/"     class="btn-s">🏠 Home</a>
+  </div>
+
+</div>
+
+<script id="result-data" type="application/json">
+  {{ result | tojson | safe }}
+</script>
+
+<script src="{{ url_for('static', filename='js/result.js') }}"></script>
+</body>
+</html>

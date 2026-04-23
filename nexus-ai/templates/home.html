@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexus AI — Smart Crop Intelligence</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Syne:wght@300;400;500;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
+</head>
+
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="bg-canvas"></canvas>
+  <div class="noise"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-logo">
+      <div class="logo-mark">🌿</div>
+      <span class="logo-text">Nexus AI</span>
+    </a>
+    <div class="nav-pill">Agricultural Intelligence</div>
+    <a href="/form" class="nav-cta">Analyse Soil <span>→</span></a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="eyebrow">
+        <div class="eyebrow-dot"></div>
+        <span class="eyebrow-text">AI-Powered Precision Farming</span>
+      </div>
+
+      <h1 class="hero-h1">
+        <span class="line">Grow <em>smarter</em></span>
+        <span class="line">with soil science</span>
+      </h1>
+
+      <p class="hero-p">Input your soil parameters and let our machine learning engine recommend the optimal crop,
+        fertilizer, and harvest strategy — tailored to your land.</p>
+
+      <div class="hero-btns">
+        <a href="/form" class="btn-main">Analyse My Soil <span class="arr">→</span></a>
+        <a href="#features" class="btn-ghost">Learn More ↓</a>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-n">20+</div>
+          <div class="stat-l">Crop Varieties</div>
+        </div>
+        <div class="stat">
+          <div class="stat-n">8</div>
+          <div class="stat-l">Parameters</div>
+        </div>
+        <div class="stat">
+          <div class="stat-n">99%</div>
+          <div class="stat-l">Data-Driven</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="panel">
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title">Crop Intelligence Feed</div>
+            <div class="live-tag">
+              <div class="live-dot"></div> Live Model
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="crop-item">
+              <div class="ci-icon" style="background:rgba(0,200,150,0.1)">🌾</div>
+              <div class="ci-info">
+                <div class="ci-name">Rice</div>
+                <div class="ci-meta">pH 6.0–7.0 · Kharif · Loam</div>
+              </div>
+              <div class="ci-badge bg-e">120 days</div>
+            </div>
+            <div class="crop-item">
+              <div class="ci-icon" style="background:rgba(245,200,66,0.1)">🌽</div>
+              <div class="ci-info">
+                <div class="ci-name">Maize</div>
+                <div class="ci-meta">pH 6.5 · Rabi · Sandy</div>
+              </div>
+              <div class="ci-badge bg-g">110 days</div>
+            </div>
+            <div class="crop-item">
+              <div class="ci-icon" style="background:rgba(100,160,255,0.1)">🌿</div>
+              <div class="ci-info">
+                <div class="ci-name">Cotton</div>
+                <div class="ci-meta">pH 7.0 · Summer · Clay</div>
+              </div>
+              <div class="ci-badge bg-b">150 days</div>
+            </div>
+            <div class="crop-item">
+              <div class="ci-icon" style="background:rgba(255,140,100,0.1)">🥜</div>
+              <div class="ci-info">
+                <div class="ci-name">Groundnut</div>
+                <div class="ci-meta">pH 6.2 · Kharif · Sandy</div>
+              </div>
+              <div class="ci-badge bg-o">90 days</div>
+            </div>
+          </div>
+          <div class="panel-footer">
+            <div class="typing-area"><span id="typeEl"></span><span class="cursor-blink">|</span></div>
+          </div>
+        </div>
+        <div class="float-card">
+          <div class="fc-label">Model Accuracy</div>
+          <div class="fc-value">94.7%</div>
+          <div class="fc-sub">Decision Tree · Depth 6</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="section-label reveal">What We Analyse</div>
+    <div class="section-title reveal">Everything your land<br><em>needs to thrive</em></div>
+
+    <div class="feat-grid">
+      <div class="feat-card reveal">
+        <div class="feat-icon" style="background:rgba(0,200,150,0.1)">🧪</div>
+        <div class="feat-name">Soil Chemistry</div>
+        <div class="feat-desc">Deep analysis of pH levels alongside NPK nutrient ratios to give your soil a precise
+          chemical fingerprint.</div>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:0.1s">
+        <div class="feat-icon" style="background:rgba(245,200,66,0.1)">💧</div>
+        <div class="feat-name">Moisture Content</div>
+        <div class="feat-desc">Calculated from wet/dry weight measurements — the most accurate field-ready moisture
+          estimation method.</div>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:0.2s">
+        <div class="feat-icon" style="background:rgba(100,160,255,0.1)">🌡️</div>
+        <div class="feat-name">Climate Parameters</div>
+        <div class="feat-desc">Temperature and seasonal context factored in so recommendations match your growing
+          conditions exactly.</div>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:0.3s">
+        <div class="feat-icon" style="background:rgba(200,100,255,0.1)">🤖</div>
+        <div class="feat-name">ML Prediction</div>
+        <div class="feat-desc">Trained Decision Tree model delivers instant crop recommendations based on hundreds of
+          soil profiles.</div>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:0.4s">
+        <div class="feat-icon" style="background:rgba(255,140,100,0.1)">🛡️</div>
+        <div class="feat-name">Pesticide Guidance</div>
+        <div class="feat-desc">Crop-specific pesticide recommendations to protect your yield before threats take hold.
+        </div>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:0.5s">
+        <div class="feat-icon" style="background:rgba(0,200,150,0.1)">📅</div>
+        <div class="feat-name">Harvest Timeline</div>
+        <div class="feat-desc">Estimated days to harvest so you can plan your season, resources, and market timing
+          precisely.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-logo">Nexus AI</div>
+    <div class="foot-note">© 2025 · AI-Powered Agricultural Intelligence</div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+</body>
+
+</html>
